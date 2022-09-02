@@ -1,0 +1,9 @@
+*.npy
+*.log
+*.csv
+data/*
+acc_npy/*
+dataa9a/*
+datacovtype/*
+datarcv1/*
+*.json
