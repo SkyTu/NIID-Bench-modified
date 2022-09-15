@@ -40,7 +40,7 @@ def get_args():
     parser.add_argument('--temperature', type=float, default=0.5, help='the temperature parameter for contrastive loss')
     parser.add_argument('--comm_round', type=int, default=50, help='number of maximum communication roun')
     parser.add_argument('--is_same_initial', type=int, default=1, help='Whether initial all the models with the same parameters in fedavg')
-    parser.add_argument('--init_seed', type=int, default=0, help="Random seed")
+    parser.add_argument('--init_seed', type=int, default=328924, help="Random seed")
     parser.add_argument('--dropout_p', type=float, required=False, default=0.0, help="Dropout probability. Default=0.0")
     parser.add_argument('--datadir', type=str, required=False, default="./data/", help="Data directory")
     parser.add_argument('--reg', type=float, default=1e-5, help="L2 regularization strength")
@@ -55,6 +55,7 @@ def get_args():
     parser.add_argument('--noise_type', type=str, default='level', help='Different level of noise or different space of noise')
     parser.add_argument('--rho', type=float, default=0, help='Parameter controlling the momentum SGD')
     parser.add_argument('--sample', type=float, default=1, help='Sample ratio for each communication round')
+    parser.add_argument('--time', type=int, default=1, help='Run tiime of this experiment')
     args = parser.parse_args()
     return args
 
@@ -394,8 +395,10 @@ def train_net_fednova(net_id, net, global_model, train_dataloader, test_dataload
 
     tau = 0
 
+
     for epoch in range(epochs):
         epoch_loss_collector = []
+        print(train_dataloader.__getitem__(0))
         for tmp in train_dataloader:
             for batch_idx, (x, target) in enumerate(tmp):
                 x, target = x.to(device), target.to(device)
@@ -1230,7 +1233,7 @@ if __name__ == '__main__':
 
         logger.info("All in test acc: %f" % testacc)
 
-    np.save('acc_npy/' + str(args.dataset) + '/' + str(args.n_parties) + ' party/' + str(args.alg) + '_' + str(args.partition) + '_train_acc.npy', np.array(train_acc_list))
-    np.save('acc_npy/' + str(args.dataset) + '/' + str(args.n_parties) + ' party/'+ str(args.alg) + '_' + str(args.partition) +'_test_acc.npy',np.array(test_acc_list))
+    np.save('acc_npy/' + str(args.dataset) + '/' + str(args.n_parties) + '/' + str(args.alg) + '/' + str(args.time) +'/' + str(args.partition) + '_train_acc.npy', np.array(train_acc_list))
+    np.save('acc_npy/' + str(args.dataset) + '/' + str(args.n_parties) + '/' + str(args.alg) + '/' + str(args.time) +'/' + str(args.partition) +'_test_acc.npy',np.array(test_acc_list))
     print(train_acc_list)
     print(test_acc_list)
